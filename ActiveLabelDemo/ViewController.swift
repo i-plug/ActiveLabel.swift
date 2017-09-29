@@ -16,13 +16,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let customType = ActiveType.custom(pattern: "\\sare\\b") //Looks for "are"
-        let customType2 = ActiveType.custom(pattern: "\\sit\\b") //Looks for "it"
-        let customType3 = ActiveType.custom(pattern: "\\ssupports\\b") //Looks for "supports"
+        let customType = ActiveType.Custom(pattern: "\\sare\\b") //Looks for "are"
+        let customType2 = ActiveType.Custom(pattern: "\\sit\\b") //Looks for "it"
 
         label.enabledTypes.append(customType)
         label.enabledTypes.append(customType2)
-        label.enabledTypes.append(customType3)
 
         label.urlMaximumLength = 31
 
@@ -41,29 +39,17 @@ class ViewController: UIViewController {
 
             label.handleMentionTap { self.alert("Mention", message: $0) }
             label.handleHashtagTap { self.alert("Hashtag", message: $0) }
-            label.handleURLTap { self.alert("URL", message: $0.absoluteString) }
+            label.handleURLTap { self.alert("URL", message: $0.absoluteString!) }
 
             //Custom types
 
-            label.customColor[customType] = UIColor.purple
-            label.customSelectedColor[customType] = UIColor.green
-            label.customColor[customType2] = UIColor.magenta
-            label.customSelectedColor[customType2] = UIColor.green
-            
-            label.configureLinkAttribute = { (type, attributes, isSelected) in
-                var atts = attributes
-                switch type {
-                case customType3:
-                    atts[NSAttributedStringKey.font] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 14)
-                default: ()
-                }
-                
-                return atts
-            }
+            label.customColor[customType] = UIColor.purpleColor()
+            label.customSelectedColor[customType] = UIColor.greenColor()
+            label.customColor[customType2] = UIColor.magentaColor()
+            label.customSelectedColor[customType2] = UIColor.greenColor()
 
             label.handleCustomTap(for: customType) { self.alert("Custom type", message: $0) }
             label.handleCustomTap(for: customType2) { self.alert("Custom type", message: $0) }
-            label.handleCustomTap(for: customType3) { self.alert("Custom type", message: $0) }
         }
 
         label.frame = CGRect(x: 20, y: 40, width: view.frame.width - 40, height: 300)
@@ -78,10 +64,10 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func alert(_ title: String, message: String) {
-        let vc = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        vc.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
-        present(vc, animated: true, completion: nil)
+    func alert(title: String, message: String) {
+        let vc = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        vc.addAction(UIAlertAction(title: "Ok", style: .Cancel, handler: nil))
+        presentViewController(vc, animated: true, completion: nil)
     }
 
 }
